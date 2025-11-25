@@ -8,7 +8,6 @@ import React from "react";
  *  - hoveredObj: { x, y, object } 형태 (Deck.gl onHover 이벤트 그대로)
  */
 export default function LayerHoveredTooltip({ hoveredObj }) {
-    // 아무 것도 선택되지 않았으면 툴팁을 그리지 않음
     if (!hoveredObj || !hoveredObj.object) return null;
 
     const { x, y, object } = hoveredObj;
@@ -16,13 +15,13 @@ export default function LayerHoveredTooltip({ hoveredObj }) {
 
     const {
         name,
+        type,      // ← 추가
         height,
         id,
         interactive,
-        carbon, // 우리가 GridLayer에서 넣어준 값
+        carbon,
     } = props;
 
-    // 툴팁 위치 & 스타일
     const style = {
         position: "absolute",
         left: x + 10,
@@ -38,22 +37,19 @@ export default function LayerHoveredTooltip({ hoveredObj }) {
         maxWidth: 220,
     };
 
-    // height가 배열로 들어오는 경우 대비 (예: [0, 1])
     const heightVal = Array.isArray(height) ? height[1] : height;
 
     return (
         <div style={style}>
             {name && <div><strong>{name}</strong></div>}
+            {type && <div>Type: {type}</div>}  {/* ← 추가 */}
             {typeof heightVal !== "undefined" && (
                 <div>height: {heightVal}</div>
             )}
             {typeof id !== "undefined" && <div>ID: {id}</div>}
-
-            {/* 여기에서 carbon 값 표시 */}
             {typeof carbon !== "undefined" && (
                 <div>carbon: {carbon}</div>
             )}
-
             {typeof interactive !== "undefined" && (
                 <div>{interactive ? "Interactive" : "Non-Interactive"}</div>
             )}
